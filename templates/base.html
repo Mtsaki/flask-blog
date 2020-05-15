@@ -1,0 +1,64 @@
+{% extends "bootstrap/base.html" %}
+
+<!-- base.htmlには全ページの共通項目を設定 -->
+
+<!-- HTML属性 -->
+{% block html_attribs %} lang="ja"{% endblock html_attribs %}
+
+<!-- CSS -->
+{% block styles %}
+  {{ super()}}
+  {{ fontawesome_html() }} 
+  {{ ckeditor.load() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='mine.css') }}">
+{% endblock styles %}
+
+<!-- ナビゲーションバー -->
+{% block navbar %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('show.index') }}"><i class="fa fa-home fa-fw"></i>Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('show.content_index') }}">Content</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('show.about') }}">About</a>
+      </li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.signout') }}"><i class="fas fa-sign-out-alt fa-fw"></i>Sign Out</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.signin') }}"><i class="fas fa-sign-in-alt fa-fw"></i>Sign In</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+  {% endblock navbar %}
+
+<!-- メッセージ -->
+{% block content %}
+<div class="container-fluid">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <!-- コンテンツ -->
+    <div class="container">
+      {% block page_content %}
+      {% endblock page_content%}
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock scripts %}

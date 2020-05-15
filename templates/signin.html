@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block page_content %}
+    <!-- 認証フォーム -->
+    <div class="card" style="width: 25em; margin: 10px auto;">
+        <div class="card-body">
+            <h1 class="card-tytle" style="text-align: center;">Sign In</h1>
+            <form action="{{ url_for('auth.signin') }}" method="POST">
+                {{ render_field(form.email) }}
+                {{ render_field(form.password) }}
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-sign-in-alt fa-fw"></i>Sign In</button>
+            </form>
+        </div>
+    </div>
+{% endblock page_content %}

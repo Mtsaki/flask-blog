@@ -1,0 +1,146 @@
+{% macro render_field_error(field) %}
+  {% if field.errors %}
+  <ul class="alert alert-danger" role="alert">
+  {% for error in field.errors %}
+    <li>{{ error }}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro render_field(field, inline=False) %}
+   {% if field.type in ('StringField', 'TextAreaField', 'PasswordField', 'CKEditorField', 'IntegerField') %}
+  <div class="form-group">
+    {% if label %}
+      {{ label }}
+    {% else %}
+      {{ field.label(class='control-label') }}
+    {% endif %}
+    {{ field(class='form-control',**kwargs)|safe }}
+
+    {{ render_field_error(field) }}
+  </div>
+
+  {% elif field.type == 'FileField' %}
+    <div class="form-group">
+      <div class="custom-file">
+        {{ field(class='custom-file-input',**kwargs)|safe }}
+        {{ field.label(class='custom-file-label') }}
+     </div>
+      {{ render_field_error(field) }}
+    </div>
+
+  {% elif field.type == 'RadioField' %}
+    <div class="form-group">
+      {% for subfield in field %}
+        {% if inline %}
+          <div class="custom-control custom-radio custom-control-inline">
+        {% else %}
+          <div class="custom-control custom-radio">
+        {% endif %}
+        {{ subfield(class='custom-control-input') }} 
+        {{ subfield.label(class='custom-control-label') }}
+        </div>
+      {% endfor %}
+      {{ render_field_error(field) }}
+    </div>
+  
+  {% elif field.type in ('SelectField', 'SelectMultipleField') %}
+      <div class="form-group">
+        {% for subfield in field %}
+          {% if inline %}
+          <div class="custom-control custom-checkbox custom-control-inline">
+          {% else %}
+            <div class="custom-control custom-checkbox">
+          {% endif %}
+            {{ subfield(class='custom-control-input',**kwargs)|safe }}
+            {{ subfield.label(class='custom-control-label') }}
+          </div>
+        {% endfor %}
+        {{ render_field_error(field) }}
+      </div>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro render_field_horizon(field, inline=False) %}
+   {% if field.type in ('StringField', 'TextAreaField', 'PasswordField', 'CKEditorField', 'IntegerField') %}
+  <div class="form-group row">
+    {% if label %}
+      {{ label }}
+    {% else %}
+      {{ field.label(class='col-sm-2 col-form-label') }}
+    {% endif %}
+    <div class="col-sm-10">
+      {{ field(class='form-control',**kwargs)|safe }}
+    </div>
+    {{ render_field_error(field) }}
+  </div>
+
+  {% elif field.type == 'FileField' %}
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <div class="custom-file">
+          {{ field(class='custom-file-input',**kwargs)|safe }}
+          {{ field.label(class='custom-file-label') }}
+        </div>
+      </div>
+      {{ render_field_error(field) }}
+    </div>
+
+  {% elif field.type == 'RadioField' %}
+    <div class="form-group row">
+      {{ field.label(class='col-sm-2 col-form-label') }}
+      <div class="col-sm-10">
+        {% for subfield in field %}
+          {% if inline %}
+            <div class="custom-control custom-radio custom-control-inline">
+          {% else %}
+            <div class="custom-control custom-radio">
+          {% endif %}
+          {{ subfield(class='custom-control-input') }} 
+          {{ subfield.label(class='custom-control-label') }}
+          </div>
+        {% endfor %}
+        {{ render_field_error(field) }}
+      </div>
+    </div>
+  
+  {% elif field.type in ('SelectField', 'SelectMultipleField') %}
+      <div class="form-group row">
+        {{ field.label(class='col-sm-2 col-form-label') }}
+        <div class="col-sm-10">
+          {% for subfield in field %}
+            {% if inline %}
+            <div class="custom-control custom-checkbox custom-control-inline">
+            {% else %}
+              <div class="custom-control custom-checkbox">
+            {% endif %}
+              {{ subfield(class='custom-control-input',**kwargs)|safe }}
+              {{ subfield.label(class='custom-control-label') }}
+            </div>
+          {% endfor %}
+          {{ render_field_error(field) }}
+        </div>
+      </div>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro render_radio_with_image(field) %}
+    <div class="form-group row">
+    {{ field.label(class='col-sm-2 col-form-label') }}
+    <div class="col-sm-10">
+      <div class="selection-group">
+        {% for subfield in field %}
+          {{ subfield }} 
+          <label for="{{ subfield.id }}">
+            <img src="/image/{{ subfield.data }}" width=300, height=100>
+          </label>
+        {% endfor %}
+      </div>
+      {{ render_field_error(field) }}
+    </div>
+  </div>
+{% endmacro %}

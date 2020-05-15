@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field, render_field_horizon, render_radio_with_image %}
+
+{% block page_content %}
+    {% if is_update %}
+        <h1>Update Content</h1>
+        <form action="{{ url_for('post.edit_content', content_id=content.content_id) }}" method="POST">
+            {{ render_field_horizon(form.content_title) }}
+            {{ render_radio_with_image(form.image) }}
+            {{ render_field_horizon(form.category, inline=True) }}
+            {{ render_field_horizon(form.tags, inline=True) }}
+            {{ render_field_horizon(form.status, inline=True) }}
+            {{ render_field_horizon(form.description) }}
+            {{ render_field_horizon(form.content_text) }}
+            {{ form.delete(class="btn btn-danger") }}
+            {{ form.commit(class="btn btn-primary") }}
+            {{ form.hidden_tag()}}
+        </form>
+    {% else %}
+        <h1>Post new content</h1>
+        <form action="{{ url_for('post.add_content') }}" method="POST">
+            {{ render_field_horizon(form.content_title) }}
+            {{ render_radio_with_image(form.image) }}
+            {{ render_field_horizon(form.category, inline=True) }}
+            {{ render_field_horizon(form.tags, inline=True) }}
+            {{ render_field_horizon(form.description) }}
+            {{ render_field_horizon(form.content_text) }}
+            {{ render_field_horizon(form.status, inline=True) }}
+            {{ form.commit(class="btn btn-primary") }}
+            {{ form.hidden_tag()}}
+        </form>
+    {% endif %}
+    {{ ckeditor.config(name='content_text') }}
+{% endblock page_content %}
